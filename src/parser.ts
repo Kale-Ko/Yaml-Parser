@@ -19,6 +19,10 @@ class Json {
     stringify(value: any, replacer?: any, space?: any) { return JSON.stringify(value, replacer, space) }
 }
 
+class YamlOptions {
+    propertiesCompatability: boolean
+}
+
 class FileOptions {
     encoding: Encoding
 }
@@ -49,25 +53,34 @@ function toJson(yaml: string) {
 
 function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
 
-function toYaml(json: JSON) {
+function toYaml(json: JSON, options?: YamlOptions) {
     if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")
 
     var yaml = ""
 
     function parse(json: JSON, indent: string) {
-        Object.keys(json).forEach((key: any) => {
-            var value = json[key]
+        if (!options.propertiesCompatability) {
+            Object.keys(json).forEach((key: any) => {
+                var value = json[key]
 
-            if (typeof value == "string") yaml += indent + key + ": " + value + "\n"
-            else if (value instanceof Array) {
-                yaml += indent + key + ":\n"; value.forEach(value => {
-                    if (typeof value == "string") yaml += indent + "  - " + value + "\n"
-                    else if (value instanceof Array) console.warn("Arrays in arrays don't work")
-                    else if (value instanceof Object) console.warn("Objects in arrays don't work")
-                })
-            }
-            else if (value instanceof Object) { yaml += indent + key + ":\n"; parse(value, indent + "  ") }
-        })
+                if (typeof value == "string") yaml += indent + key + ": " + value + "\n"
+                else if (value instanceof Array) {
+                    yaml += indent + key + ":\n"; value.forEach(value => {
+                        if (typeof value == "string") yaml += indent + "  - " + value + "\n"
+                        else if (value instanceof Array) console.warn("Arrays in arrays don't work")
+                        else if (value instanceof Object) console.warn("Objects in arrays don't work")
+                    })
+                }
+                else if (value instanceof Object) { yaml += indent + key + ":\n"; parse(value, indent + "  ") }
+            })
+        } else {
+            Object.keys(json).forEach((key: any) => {
+                var value = json[key]
+
+                if (typeof value == "string") yaml += indent + key + ": " + value + "\n"
+                else if (value instanceof Array || value instanceof Object) console.warn("Arrays and Objects are disabled because properties compatability is enabled")
+            })
+        }
     }
     parse(json, "")
 
@@ -83,6 +96,7 @@ module.exports = {
     toYamlFromFile,
     Yaml,
     Json,
+    YamlOptions,
     FileOptions,
     Encoding
 }
