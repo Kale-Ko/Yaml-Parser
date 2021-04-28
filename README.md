@@ -8,9 +8,9 @@ It also works with .properties files
 
 # Setup
 
-To setup simply type `npm install yaml-parser --save`
+To setup simply type `npm install simple-yaml-parser --save` in a console
 
-Then in your script add `const yamlParser = require("yaml-parser")`
+Then in your script add `const yamlParser = require("simple-yaml-parser")`
 
 
 
