@@ -1,0 +1,40 @@
+{
+    "name": "yaml-parser",
+    "version": "1.0.0",
+    "description": "A yaml parser for node.js",
+    "main": "bin/parser.js",
+    "scripts": {
+        "test": "node test/test.js"
+    },
+    "dependencies": {
+        "fs": "0.0.1-security"
+    },
+    "devDependencies": {
+        "@types/node": "^15.0.1",
+        "typescript": "^4.2.4"
+    },
+    "author": {
+        "name": "Kale Ko",
+        "url": "https://kaleko.herokuapp.com/"
+    },
+    "license": "Apache-2.0",
+    "keywords": [
+        "yml",
+        "yaml",
+        ".yml",
+        ".yaml",
+        "propertie",
+        "properties",
+        ".propertie",
+        ".properties",
+        "parser"
+    ],
+    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Kale-Ko/Yaml-Parser/"
+    },
+    "bugs": {
+        "url": "https://github.com/Kale-Ko/Yaml-Parser/issues"
+    }
+}
