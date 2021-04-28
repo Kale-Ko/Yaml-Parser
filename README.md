@@ -15,7 +15,8 @@ Then in your script add `const yamlParser = require("yaml-parser")`
 
 
 # YML to Json
-
+### ***Currently not working***
+\
 `yamlParser.toJson(yamlString)` - Takes a yaml string and returns a json
 
 \
