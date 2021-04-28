@@ -27,7 +27,8 @@
         "properties",
         ".propertie",
         ".properties",
-        "parser"
+        "parser",
+        "converter"
     ],
     "homepage": "",
     "repository": {

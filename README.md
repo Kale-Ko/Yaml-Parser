@@ -1,6 +1,6 @@
-# YML Parser
+# YAML Parser
 
-YML Parser is a simple way to turn a json into a yml file and a yml into a json file.
+YAML Parser is a simple way to turn a json into a yaml file and a yaml into a json file.
 
 It also works with .properties files
 
@@ -8,34 +8,39 @@ It also works with .properties files
 
 # Setup
 
-To setup simply type `npm install {package-name} --save`
+To setup simply type `npm install yaml-parser --save`
 
-Then in your script add `const ymlParser = require("{package-name}")`
+Then in your script add `const yamlParser = require("yaml-parser")`
 
 
 
 # YML to Json
 
-`ymlParser.toJson(ymlString)` - Takes a yml string and returns a json
+`yamlParser.toJson(yamlString)` - Takes a yaml string and returns a json
 
 \
-`ymlParser.toJsonFromFile(fileName, options)` - Takes a yml file and returns a json
+`yamlParser.toJsonFromFile(fileName, options)` - Takes a yaml file and returns a json
 
 ### Options:
 encoding: A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
+### Feature Support
+None
 
 
-# Json to YML
 
-`ymlParser.toYml(json)` - Takes a json and returns a yml string
+# Json to YAML
+
+`yamlParser.toYaml(json)` - Takes a json and returns a yaml string
 
 \
-`ymlParser.toYmlFromFile(fileName, options)` - Takes a json file and returns a yml string
+`yamlParser.toYamlFromFile(fileName, options)` - Takes a json file and returns a yaml string
 
 ### Options:
 encoding: A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
 ### Feature Support
 Strings,
-Arrays
+Objects,
+Arrays,
+Sub Objects
