@@ -1,10 +1,22 @@
 var fs = require("fs");
-module.exports = {
-    toJson: toJson,
-    toJsonFromFile: toJsonFromFile,
-    toYaml: toYaml,
-    toYamlFromFile: toYamlFromFile
-};
+var Yaml = /** @class */ (function () {
+    function Yaml(string) {
+        this.string = string;
+    }
+    Yaml.prototype.toString = function () { return this.string; };
+    Yaml.prototype.toJson = function () { return toJson(this.string); };
+    return Yaml;
+}());
+var Json = /** @class */ (function () {
+    function Json(json) {
+        this.json = json;
+    }
+    Json.prototype.toString = function () { return this.json.toString(); };
+    Json.prototype.toYaml = function () { return toYaml(this.json); };
+    Json.prototype.parse = function (text, reviver) { return JSON.parse(text, reviver); };
+    Json.prototype.stringify = function (value, replacer, space) { return JSON.stringify(value, replacer, space); };
+    return Json;
+}());
 var FileOptions = /** @class */ (function () {
     function FileOptions() {
     }
@@ -23,6 +35,14 @@ var Encoding;
 })(Encoding || (Encoding = {}));
 function toJson(yaml) {
     throw new Error("toJson is not currently working");
+    /*var json = {}
+
+    function parse(yaml: string, indent: string) {
+
+    }
+    parse(yaml, "")
+
+    return new Json(json)*/
 }
 function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding)); }
 function toYaml(json) {
@@ -52,6 +72,16 @@ function toYaml(json) {
         });
     }
     parse(json, "");
-    return yaml;
+    return new Yaml(yaml);
 }
 function toYamlFromFile(jsonFile, options) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))); }
+module.exports = {
+    toJson: toJson,
+    toJsonFromFile: toJsonFromFile,
+    toYaml: toYaml,
+    toYamlFromFile: toYamlFromFile,
+    Yaml: Yaml,
+    Json: Json,
+    FileOptions: FileOptions,
+    Encoding: Encoding
+};

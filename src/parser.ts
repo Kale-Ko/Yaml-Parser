@@ -1,10 +1,22 @@
 const fs = require("fs")
 
-module.exports = {
-    toJson,
-    toJsonFromFile,
-    toYaml,
-    toYamlFromFile
+class Yaml {
+    constructor(string: string) { this.string = string }
+    string: string
+    toString() { return this.string }
+    toJson() { return toJson(this.string) }
+}
+
+class Json {
+    constructor(json: JSON) { this.json = json }
+    json: JSON
+    toString() { return this.json.toString() }
+    toYaml() { return toYaml(this.json) }
+
+    parse(text: string, reviver?: (this: any, key: string, value: any) => any) { return JSON.parse(text, reviver) }
+    stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string
+    stringify(value: any, replacer?: (string | number)[], space?: string | number): string
+    stringify(value: any, replacer?: any, space?: any) { return JSON.stringify(value, replacer, space) }
 }
 
 class FileOptions {
@@ -32,7 +44,7 @@ function toJson(yaml: string) {
     }
     parse(yaml, "")
 
-    return json*/
+    return new Json(json)*/
 }
 
 function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
@@ -59,7 +71,18 @@ function toYaml(json: JSON) {
     }
     parse(json, "")
 
-    return yaml
+    return new Yaml(yaml)
 }
 
 function toYamlFromFile(jsonFile: string, options?: FileOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))) }
+
+module.exports = {
+    toJson,
+    toJsonFromFile,
+    toYaml,
+    toYamlFromFile,
+    Yaml,
+    Json,
+    FileOptions,
+    Encoding
+}
