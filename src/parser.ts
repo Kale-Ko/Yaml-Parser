@@ -3,8 +3,8 @@ const fs = require("fs")
 module.exports = {
     toJson,
     toJsonFromFile,
-    toYml,
-    toYmlFromFile
+    toYaml,
+    toYamlFromFile
 }
 
 class FileOptions {
@@ -22,44 +22,44 @@ enum Encoding {
     "utf-32"
 }
 
-function toJson(yml: string) {
+function toJson(yaml: string) {
     throw new Error("toJson is not currently working")
 
     /*var json = {}
 
-    function parse(yml: string, indent: string) {
+    function parse(yaml: string, indent: string) {
 
     }
-    parse(yml, "")
+    parse(yaml, "")
 
     return json*/
 }
 
-function toJsonFromFile(ymlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(ymlFile, options.encoding)) }
+function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
 
-function toYml(json: JSON) {
+function toYaml(json: JSON) {
     if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")
 
-    var yml = ""
+    var yaml = ""
 
     function parse(json: JSON, indent: string) {
         Object.keys(json).forEach((key: any) => {
             var value = json[key]
 
-            if (typeof value == "string") yml += indent + key + ": " + value + "\n"
+            if (typeof value == "string") yaml += indent + key + ": " + value + "\n"
             else if (value instanceof Array) {
-                yml += indent + key + ":\n"; value.forEach(value => {
-                    if (typeof value == "string") yml += indent + "  - " + value + "\n"
+                yaml += indent + key + ":\n"; value.forEach(value => {
+                    if (typeof value == "string") yaml += indent + "  - " + value + "\n"
                     else if (value instanceof Array) console.warn("Arrays in arrays don't work")
                     else if (value instanceof Object) console.warn("Objects in arrays don't work")
                 })
             }
-            else if (value instanceof Object) { yml += indent + key + ":\n"; parse(value, indent + "  ") }
+            else if (value instanceof Object) { yaml += indent + key + ":\n"; parse(value, indent + "  ") }
         })
     }
     parse(json, "")
 
-    return yml
+    return yaml
 }
 
-function toYmlFromFile(jsonFile: string, options?: FileOptions) { return toYml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))) }
+function toYamlFromFile(jsonFile: string, options?: FileOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))) }
