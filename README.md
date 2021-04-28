@@ -2,7 +2,7 @@
 
 YAML Parser is a simple way to turn a json into a yaml file and a yaml into a json file.
 
-It also works with .properties files
+Simple Jsons also work with .properties files
 
 
 
@@ -23,7 +23,7 @@ Then in your script add `const yamlParser = require("simple-yaml-parser")`
 `yamlParser.toJsonFromFile(fileName, options)` - Takes a yaml file and returns a json
 
 ### Options:
-encoding: A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
+encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
 ### Feature Support
 None
@@ -32,16 +32,42 @@ None
 
 # Json to YAML
 
-`yamlParser.toYaml(json)` - Takes a json and returns a yaml string
-
-\
-`yamlParser.toYamlFromFile(fileName, options)` - Takes a json file and returns a yaml string
+`yamlParser.toYaml(json)` - Takes a json and returns a yaml object
 
 ### Options:
-encoding: A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
+propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
+
+\
+`yamlParser.toYamlFromFile(fileName, options)` - Takes a json file and returns a yaml object
+
+### Options:
+encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
 ### Feature Support
 Strings,
 Objects,
 Arrays,
-Sub Objects
+Strings in Objects
+Arrays in Objects
+Objects in Objects
+
+
+
+# Yaml Object
+
+`Yaml.toString()` - Turns a Yaml object into a string
+
+\
+`Yaml.toJson()` - Turns a Yaml object into a Json object
+
+
+
+# Json Object
+
+Default Json functions
+
+\
+`Json.toString()` - Turns the Json object into a string
+
+\
+`Json.toYaml()` - Turns the Json object into a Yaml object
