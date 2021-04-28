@@ -1,6 +1,6 @@
-# YAML Parser
+# Yaml Parser
 
-YAML Parser is a simple way to turn a json into a yaml file and a yaml into a json file.
+Yaml Parser is a simple way to turn a json into a yaml file and vice versa
 
 Simple Jsons also work with .properties files
 
@@ -15,35 +15,38 @@ Then in your script add `const yamlParser = require("simple-yaml-parser")`
 
 
 # YML to Json
-### ***Currently not working***
-\
-`yamlParser.toJson(yamlString)` - Takes a yaml string and returns a json
+
+`yamlParser.toJson(yamlString, options)` - Takes a yaml string and returns a json
 
 \
-`yamlParser.toJsonFromFile(fileName, options)` - Takes a yaml file and returns a json
+`yamlParser.toJsonFromFile(fileName, fileOptions, options)` - Takes a yaml file and returns a json
 
 ### Options:
+indentAmount - Number - How many spaces to use for an indent
+
+### File Options:
 encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
-### Feature Support
+## Feature Support
 None
 
 
 
 # Json to YAML
 
-`yamlParser.toYaml(json)` - Takes a json and returns a yaml object
-
-### Options:
-propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
+`yamlParser.toYaml(json, options)` - Takes a json and returns a yaml object
 
 \
-`yamlParser.toYamlFromFile(fileName, options)` - Takes a json file and returns a yaml object
+`yamlParser.toYamlFromFile(fileName, fileOptions, options)` - Takes a json file and returns a yaml object
 
 ### Options:
+indentAmount - Number - How many spaces to use for an indent
+propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
+
+### File Options:
 encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
 
-### Feature Support
+## Feature Support
 Strings,
 Objects,
 Arrays,
@@ -64,10 +67,8 @@ Objects in Objects
 
 # Json Object
 
-Default Json functions
+\
+`Json.toString()` - Turns a Json object into a string
 
 \
-`Json.toString()` - Turns the Json object into a string
-
-\
-`Json.toYaml()` - Turns the Json object into a Yaml object
+`Json.toYaml()` - Turns a Json object into a Yaml object

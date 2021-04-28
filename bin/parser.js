@@ -1,4 +1,12 @@
 var fs = require("fs");
+var Json = /** @class */ (function () {
+    function Json(json) {
+        this.json = json;
+    }
+    Json.prototype.toString = function () { return JSON.stringify(this.json); };
+    Json.prototype.toYaml = function () { return toYaml(this.json); };
+    return Json;
+}());
 var Yaml = /** @class */ (function () {
     function Yaml(string) {
         this.string = string;
@@ -7,15 +15,15 @@ var Yaml = /** @class */ (function () {
     Yaml.prototype.toJson = function () { return toJson(this.string); };
     return Yaml;
 }());
-var Json = /** @class */ (function () {
-    function Json(json) {
-        this.json = json;
+var JsonOptions = /** @class */ (function () {
+    function JsonOptions() {
     }
-    Json.prototype.toString = function () { return this.json.toString(); };
-    Json.prototype.toYaml = function () { return toYaml(this.json); };
-    Json.prototype.parse = function (text, reviver) { return JSON.parse(text, reviver); };
-    Json.prototype.stringify = function (value, replacer, space) { return JSON.stringify(value, replacer, space); };
-    return Json;
+    return JsonOptions;
+}());
+var YamlOptions = /** @class */ (function () {
+    function YamlOptions() {
+    }
+    return YamlOptions;
 }());
 var FileOptions = /** @class */ (function () {
     function FileOptions() {
@@ -33,7 +41,7 @@ var Encoding;
     Encoding[Encoding["utf32"] = 6] = "utf32";
     Encoding[Encoding["utf-32"] = 7] = "utf-32";
 })(Encoding || (Encoding = {}));
-function toJson(yaml) {
+function toJson(yaml, options) {
     throw new Error("toJson is not currently working");
     /*var json = {}
 
@@ -42,46 +50,70 @@ function toJson(yaml) {
     }
     parse(yaml, "")
 
-    return new Json(json)*/
+    return new Json(JSON.parse(JSON.stringify(json)))*/
 }
-function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding)); }
-function toYaml(json) {
+function toJsonFromFile(yamlFile, options, jsonOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions); }
+function toYaml(json, options) {
     if (json instanceof Array)
         throw new Error("You currently can't input json arrays unless they are a subvalue");
     var yaml = "";
+    var indentT = "  ";
+    if (options != null) {
+        indentT = "";
+        for (var index = 0; index < (options.indentAmount || 2); index++)
+            indentT += " ";
+    }
     function parse(json, indent) {
-        Object.keys(json).forEach(function (key) {
-            var value = json[key];
-            if (typeof value == "string")
-                yaml += indent + key + ": " + value + "\n";
-            else if (value instanceof Array) {
-                yaml += indent + key + ":\n";
-                value.forEach(function (value) {
-                    if (typeof value == "string")
-                        yaml += indent + "  - " + value + "\n";
-                    else if (value instanceof Array)
-                        console.warn("Arrays in arrays don't work");
-                    else if (value instanceof Object)
-                        console.warn("Objects in arrays don't work");
-                });
-            }
-            else if (value instanceof Object) {
-                yaml += indent + key + ":\n";
-                parse(value, indent + "  ");
-            }
-        });
+        var propertiesCompatability = false;
+        if (options != null) {
+            if (options.propertiesCompatability)
+                propertiesCompatability = true;
+        }
+        if (!propertiesCompatability) {
+            Object.keys(json).forEach(function (key) {
+                var value = json[key];
+                if (typeof value == "string")
+                    yaml += indent + key + ": " + value + "\n";
+                else if (value instanceof Array) {
+                    yaml += indent + key + ":\n";
+                    value.forEach(function (value) {
+                        if (typeof value == "string")
+                            yaml += indent + indentT + "- " + value + "\n";
+                        else if (value instanceof Array)
+                            console.warn("Arrays in arrays don't work");
+                        else if (value instanceof Object)
+                            console.warn("Objects in arrays don't work");
+                    });
+                }
+                else if (value instanceof Object) {
+                    yaml += indent + key + ":\n";
+                    parse(value, indent + indentT);
+                }
+            });
+        }
+        else {
+            Object.keys(json).forEach(function (key) {
+                var value = json[key];
+                if (typeof value == "string")
+                    yaml += indent + key + ": " + value + "\n";
+                else if (value instanceof Array || value instanceof Object)
+                    console.warn("Arrays and Objects are disabled because properties compatability is enabled");
+            });
+        }
     }
     parse(json, "");
     return new Yaml(yaml);
 }
-function toYamlFromFile(jsonFile, options) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))); }
+function toYamlFromFile(jsonFile, options, yamlOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding)), yamlOptions); }
 module.exports = {
     toJson: toJson,
     toJsonFromFile: toJsonFromFile,
     toYaml: toYaml,
     toYamlFromFile: toYamlFromFile,
-    Yaml: Yaml,
     Json: Json,
+    Yaml: Yaml,
+    JsonOptions: JsonOptions,
+    YamlOptions: YamlOptions,
     FileOptions: FileOptions,
     Encoding: Encoding
 };
