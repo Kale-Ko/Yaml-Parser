@@ -1,5 +1,12 @@
 const fs = require("fs")
 
+class Json {
+    constructor(json: JSON) { this.json = json }
+    json: JSON
+    toString() { return JSON.stringify(this.json) }
+    toYaml() { return toYaml(this.json) }
+}
+
 class Yaml {
     constructor(string: string) { this.string = string }
     string: string
@@ -7,19 +14,12 @@ class Yaml {
     toJson() { return toJson(this.string) }
 }
 
-class Json {
-    constructor(json: JSON) { this.json = json }
-    json: JSON
-    toString() { return this.json.toString() }
-    toYaml() { return toYaml(this.json) }
-
-    parse(text: string, reviver?: (this: any, key: string, value: any) => any) { return JSON.parse(text, reviver) }
-    stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string
-    stringify(value: any, replacer?: (string | number)[], space?: string | number): string
-    stringify(value: any, replacer?: any, space?: any) { return JSON.stringify(value, replacer, space) }
+class JsonOptions {
+    indentAmount: number
 }
 
 class YamlOptions {
+    indentAmount: number
     propertiesCompatability: boolean
 }
 
@@ -38,7 +38,7 @@ enum Encoding {
     "utf-32"
 }
 
-function toJson(yaml: string) {
+function toJson(yaml: string, options?: JsonOptions) {
     throw new Error("toJson is not currently working")
 
     /*var json = {}
@@ -48,30 +48,35 @@ function toJson(yaml: string) {
     }
     parse(yaml, "")
 
-    return new Json(json)*/
+    return new Json(JSON.parse(JSON.stringify(json)))*/
 }
 
-function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
+function toJsonFromFile(yamlFile: string, options?: FileOptions, jsonOptions?: JsonOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions) }
 
 function toYaml(json: JSON, options?: YamlOptions) {
     if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")
 
     var yaml = ""
+    var indentT = "  "
+    if (options != null) { indentT = ""; for (var index = 0; index < (options.indentAmount || 2); index++) indentT += " " }
 
     function parse(json: JSON, indent: string) {
-        if (!options.propertiesCompatability) {
+        var propertiesCompatability = false
+        if (options != null) { if (options.propertiesCompatability) propertiesCompatability = true }
+
+        if (!propertiesCompatability) {
             Object.keys(json).forEach((key: any) => {
                 var value = json[key]
 
                 if (typeof value == "string") yaml += indent + key + ": " + value + "\n"
                 else if (value instanceof Array) {
                     yaml += indent + key + ":\n"; value.forEach(value => {
-                        if (typeof value == "string") yaml += indent + "  - " + value + "\n"
+                        if (typeof value == "string") yaml += indent + indentT + "- " + value + "\n"
                         else if (value instanceof Array) console.warn("Arrays in arrays don't work")
                         else if (value instanceof Object) console.warn("Objects in arrays don't work")
                     })
                 }
-                else if (value instanceof Object) { yaml += indent + key + ":\n"; parse(value, indent + "  ") }
+                else if (value instanceof Object) { yaml += indent + key + ":\n"; parse(value, indent + indentT) }
             })
         } else {
             Object.keys(json).forEach((key: any) => {
@@ -87,15 +92,16 @@ function toYaml(json: JSON, options?: YamlOptions) {
     return new Yaml(yaml)
 }
 
-function toYamlFromFile(jsonFile: string, options?: FileOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding))) }
+function toYamlFromFile(jsonFile: string, options?: FileOptions, yamlOptions?: YamlOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding)), yamlOptions) }
 
 module.exports = {
     toJson,
     toJsonFromFile,
     toYaml,
     toYamlFromFile,
-    Yaml,
     Json,
+    Yaml,
+    JsonOptions,
     YamlOptions,
     FileOptions,
     Encoding
