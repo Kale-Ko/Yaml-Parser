@@ -1,7 +1,7 @@
 const yamlParser = require("../bin/parser.js")
 
 var toJson = yamlParser.toJsonFromFile("./test/test.yml", { encoding: "utf8" })
-//var toYaml = yamlParser.toYamlFromFile("./test/test.json", { encoding: "utf8" })
+var toYaml = yamlParser.toYamlFromFile("./test/test.json", { encoding: "utf8" })
 
 console.log(toJson)
 //console.log(toYaml)
