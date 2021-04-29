@@ -24,7 +24,7 @@ Then in your script add `const yamlParser = require("simple-yaml-parser")`
 `yamlParser.toJsonFromFile(fileName, fileOptions, options)` - Takes a yaml file and returns a json
 
 ### Options:
-indentAmount - Number - How many spaces to use for an indent
+indentAmount - A Number - How many spaces to use for an indent
 
 ### File Options:
 encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
@@ -42,7 +42,7 @@ None
 `yamlParser.toYamlFromFile(fileName, fileOptions, options)` - Takes a json file and returns a yaml object
 
 ### Options:
-indentAmount - Number - How many spaces to use for an indent
+indentAmount - A Number - How many spaces to use for an indent
 propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
 
 ### File Options:
@@ -55,6 +55,20 @@ Arrays,
 Strings in Objects
 Arrays in Objects
 Objects in Objects
+Propertie files
+
+
+
+# Json Object
+
+\
+`Json.toString()` - Turns a Json object into a string
+
+\
+`Json.toJson()` - Turns a Json object into a normal JSON
+
+\
+`Json.toYaml()` - Turns a Json object into a Yaml object
 
 
 
@@ -67,10 +81,14 @@ Objects in Objects
 
 
 
-# Json Object
+# YAML Object
+
+Static
+
+`YAML.parse(json)` - Takes a Json object and returns a Yaml
 
 \
-`Json.toString()` - Turns a Json object into a string
+`YAML.stringify(yaml)` - Takes a Yaml object and returns a string
 
 \
-`Json.toYaml()` - Turns a Json object into a Yaml object
+`YAML.jsonify(yaml)` - Takes a Yaml object and returns a Json
