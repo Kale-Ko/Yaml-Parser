@@ -1,17 +1,24 @@
 const fs = require("fs")
 
 class Json {
-    constructor(json: JSON) { this.json = json }
+    constructor(json: JSON | Json) { if (json instanceof Json) this.json = json.json; else this.json = json }
     json: JSON
     toString() { return JSON.stringify(this.json) }
-    toYaml() { return toYaml(this.json) }
+    toJson() { return this.json }
+    toYaml() { return YAML.parse(this.json) }
 }
 
 class Yaml {
     constructor(string: string) { this.string = string }
     string: string
-    toString() { return this.string }
-    toJson() { return toJson(this.string) }
+    toString() { return YAML.stringify(this) }
+    toJson() { return YAML.jsonify(this) }
+}
+
+class YAML {
+    static parse(json: JSON | Json) { if (json instanceof Json) return toYaml(json.json); else return toYaml(json) }
+    static stringify(yaml: Yaml) { return yaml.string }
+    static jsonify(yaml: Yaml) { return toJson(YAML.stringify(yaml)) }
 }
 
 class JsonOptions {
@@ -39,7 +46,7 @@ enum Encoding {
 }
 
 function toJson(yaml: string, options?: JsonOptions) {
-    throw new Error("toJson is not currently working")
+    throw new Error("toJson is not currently working. I am working on it though!")
 
     /*var json = {}
 
@@ -101,6 +108,7 @@ module.exports = {
     toYamlFromFile,
     Json,
     Yaml,
+    YAML,
     JsonOptions,
     YamlOptions,
     FileOptions,
