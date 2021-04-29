@@ -1,6 +1,6 @@
-# Yaml Parser
+# Super Yaml Parser
 
-Yaml Parser is a simple way to turn a json into a yaml file and vice versa
+Super Yaml Parser is a simple way to turn a json into a yaml file and vice versa
 
 Simple Jsons also work with .properties files
 
@@ -8,9 +8,9 @@ Simple Jsons also work with .properties files
 
 # Setup
 
-To setup simply type `npm install simple-yaml-parser --save` in a console
+To setup simply type `npm install super-yaml-parser --save` in a console
 
-Then in your script add `const yamlParser = require("simple-yaml-parser")`
+Then in your script add `const yamlParser = require("super-yaml-parser")`
 
 
 
