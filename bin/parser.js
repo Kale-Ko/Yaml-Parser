@@ -62,7 +62,7 @@ var YamlTypes;
     YamlTypes["Array"] = "Array";
     YamlTypes["ArrayValue"] = "ArrayValue";
 })(YamlTypes || (YamlTypes = {}));
-function toJson(yaml, options) {
+function toJson(yaml) {
     var json = {};
     var fileIndent = detectIndent(yaml).amount;
     var lines = yaml.replace(/\r/ig, "").split("\n");
@@ -94,48 +94,52 @@ function toJson(yaml, options) {
     lines.forEach(function (line) { if (line.type == YamlTypes.Object && lines[lines.indexOf(line) + 1].type == YamlTypes.ArrayValue)
         lines[lines.indexOf(line)].type = YamlTypes.Array; });
     lines.forEach(function (line) {
-        if (line.type == YamlTypes.String)
-            json[line.key] = line.value;
-        else if (line.type == YamlTypes.Object) {
-            json[line.key] = {};
-            var started = false;
-            var theLine = line;
-            lines.forEach(function (line) {
-                if (line.key == theLine.key) {
-                    started = true;
-                    return;
-                }
-                if (line.indent == theLine.indent) {
-                    started = false;
-                }
-                if (!started || line.indent != theLine.indent + fileIndent)
-                    return;
-                //json[theLine.key][line.key] = line.value
-            });
+        function parse(line, parent) {
+            if (line.type == YamlTypes.String)
+                parent[line.key] = line.value;
+            else if (line.type == YamlTypes.Object) {
+                parent[line.key] = {};
+                var started = false;
+                var theLine = line;
+                lines.forEach(function (line) {
+                    if (line.key == theLine.key) {
+                        started = true;
+                        return;
+                    }
+                    if (line.indent == theLine.indent) {
+                        started = false;
+                    }
+                    if (!started || line.indent != theLine.indent + fileIndent)
+                        return;
+                    parse(line, parent[theLine.key]);
+                });
+            }
+            else if (line.type == YamlTypes.Array) {
+                parent[line.key] = [];
+                var started2 = false;
+                var theLine2 = line;
+                lines.forEach(function (line) {
+                    if (line.key == theLine2.key) {
+                        started2 = true;
+                        return;
+                    }
+                    if (!started2)
+                        return;
+                    if (line.type == YamlTypes.ArrayValue) {
+                        if (line.indent - 2 == theLine2.indent)
+                            parent[theLine2.key].push(line.value.replace("-", ""));
+                    }
+                    else
+                        started2 = false;
+                });
+            }
         }
-        else if (line.type == YamlTypes.Array) {
-            json[line.key] = [];
-            var started2 = false;
-            var theLine2 = line;
-            lines.forEach(function (line) {
-                if (line.key == theLine2.key) {
-                    started2 = true;
-                    return;
-                }
-                if (!started2)
-                    return;
-                if (line.type == YamlTypes.ArrayValue) {
-                    if (line.indent - 2 == theLine2.indent)
-                        json[theLine2.key].push(line.value.replace("-", ""));
-                }
-                else
-                    started2 = false;
-            });
-        }
+        if (line.indent == 0)
+            parse(line, json);
     });
     return new Json(JSON.parse(JSON.stringify(json)));
 }
-function toJsonFromFile(yamlFile, options, jsonOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions); }
+function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions); }
 function toYaml(json, options) {
     if (json instanceof Array)
         throw new Error("You currently can't input json arrays unless they are a subvalue");
