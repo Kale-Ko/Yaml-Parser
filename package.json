@@ -1,6 +1,6 @@
 {
-    "name": "simple-yaml-parser",
-    "version": "1.0.0",
+    "name": "super-yaml-parser",
+    "version": "1.0.1",
     "description": "A relatively simple yaml parser for node.js",
     "main": "bin/parser.js",
     "scripts": {
