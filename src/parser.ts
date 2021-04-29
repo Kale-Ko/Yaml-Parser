@@ -1,4 +1,5 @@
 const fs = require("fs")
+const detectIndent = require('detect-indent');
 
 class Json {
     constructor(json: JSON | Json) { if (json instanceof Json) this.json = json.json; else this.json = json }
@@ -17,13 +18,12 @@ class Yaml {
 
 class YAML {
     static parse(json: JSON | Json) { if (json instanceof Json) return toYaml(json.json); else return toYaml(json) }
+    static parseString(yaml: string) { return new Yaml(yaml) }
     static stringify(yaml: Yaml) { return yaml.string }
     static jsonify(yaml: Yaml) { return toJson(YAML.stringify(yaml)) }
 }
 
-class JsonOptions {
-    indentAmount: number
-}
+class JsonOptions { }
 
 class YamlOptions {
     indentAmount: number
@@ -35,27 +35,83 @@ class FileOptions {
 }
 
 enum Encoding {
-    "us-ascii",
-    "utf8",
-    "utf-8",
-    "ebcdic",
-    "utf16",
-    "utf-16",
-    "utf32",
-    "utf-32"
+    us_ascii = "us-ascii",
+    utf8 = "utf8",
+    ebcdic = "ebcdic",
+    utf16 = "utf16",
+    utf32 = "utf32",
+}
+
+enum YamlTypes {
+    String = "String",
+    Object = "Object",
+    Array = "Array",
+    ArrayValue = "ArrayValue"
 }
 
 function toJson(yaml: string, options?: JsonOptions) {
-    throw new Error("toJson is not currently working. I am working on it though!")
+    var json = {}
 
-    /*var json = {}
+    var fileIndent = detectIndent(yaml).amount
 
-    function parse(yaml: string, indent: string) {
+    var lines = yaml.replace(/\r/ig, "").split("\n")
+    lines.forEach((line: any) => {
+        var key = lines.indexOf(line)
 
-    }
-    parse(yaml, "")
+        var indent = detectIndent(lines[key]).amount
 
-    return new Json(JSON.parse(JSON.stringify(json)))*/
+        lines[key] = line.replace(/ /ig, "")
+
+        var split = lines[key].split(":")
+
+        lines[key] = {}
+
+        if (split[0].startsWith("-")) {
+            lines[key].type = YamlTypes.ArrayValue
+            lines[key].value = split[0]
+            lines[key].indent = indent
+        } else if (split[1] == "") {
+            lines[key].type = YamlTypes.Object
+            lines[key].key = split[0]
+            lines[key].indent = indent
+        } else {
+            lines[key].type = YamlTypes.String
+            lines[key].key = split[0]
+            lines[key].value = split[1]
+            lines[key].indent = indent
+        }
+    })
+
+    if (lines[lines.length - 1].key == "") lines.pop()
+
+    lines.forEach((line: any) => { if (line.type == YamlTypes.Object && lines[lines.indexOf(line) + 1].type == YamlTypes.ArrayValue) lines[lines.indexOf(line)].type = YamlTypes.Array })
+
+    lines.forEach((line: any) => {
+        if (line.type == YamlTypes.String) json[line.key] = line.value
+        else if (line.type == YamlTypes.Object) {
+            json[line.key] = {}
+
+            var started = false
+            var theLine = line
+            lines.forEach((line: any) => {
+                if (line.key == theLine.key) { started = true; return } if (line.indent == theLine.indent) { started = false } if (!started || line.indent != theLine.indent + fileIndent) return
+
+                //json[theLine.key][line.key] = line.value
+            })
+        } else if (line.type == YamlTypes.Array) {
+            json[line.key] = []
+
+            var started2 = false
+            var theLine2 = line
+            lines.forEach((line: any) => {
+                if (line.key == theLine2.key) { started2 = true; return } if (!started2) return
+
+                if (line.type == YamlTypes.ArrayValue) { if (line.indent - 2 == theLine2.indent) json[theLine2.key].push(line.value.replace("-", "")) } else started2 = false
+            })
+        }
+    })
+
+    return new Json(JSON.parse(JSON.stringify(json)))
 }
 
 function toJsonFromFile(yamlFile: string, options?: FileOptions, jsonOptions?: JsonOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions) }
@@ -96,7 +152,7 @@ function toYaml(json: JSON, options?: YamlOptions) {
     }
     parse(json, "")
 
-    return new Yaml(yaml)
+    return YAML.parseString(yaml)
 }
 
 function toYamlFromFile(jsonFile: string, options?: FileOptions, yamlOptions?: YamlOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding)), yamlOptions) }

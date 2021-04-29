@@ -1,0 +1,13 @@
+string: String
+object:
+  subString: Sub String
+  subObject:
+    subSubString: Sub Sub String
+  subArray:
+    - Sub 1.
+    - Sub 2.
+    - Sub 3.
+array:
+  - 1.
+  - 2.
+  - 3.
