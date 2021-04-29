@@ -17,7 +17,7 @@ Then in your script add `const yamlParser = require("simple-yaml-parser")`
 # Yaml to Json
 
 ### ***Currently not working*** - It is much harder to code :D. I am working on it
-
+\
 `yamlParser.toJson(yamlString, options)` - Takes a yaml string and returns a json
 
 \
@@ -42,7 +42,7 @@ None
 `yamlParser.toYamlFromFile(fileName, fileOptions, options)` - Takes a json file and returns a yaml object
 
 ### Options:
-indentAmount - A Number - How many spaces to use for an indent
+indentAmount - A Number - How many spaces to use for an indent\
 propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
 
 ### File Options:
@@ -52,10 +52,10 @@ encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "u
 Strings,
 Objects,
 Arrays,
-Strings in Objects
-Arrays in Objects
-Objects in Objects
-Propertie files
+Strings in Objects,
+Arrays in Objects,
+Objects in Objects,
+.Propertie files
 
 
 
