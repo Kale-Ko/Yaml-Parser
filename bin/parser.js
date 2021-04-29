@@ -1,19 +1,34 @@
 var fs = require("fs");
 var Json = /** @class */ (function () {
     function Json(json) {
-        this.json = json;
+        if (json instanceof Json)
+            this.json = json.json;
+        else
+            this.json = json;
     }
     Json.prototype.toString = function () { return JSON.stringify(this.json); };
-    Json.prototype.toYaml = function () { return toYaml(this.json); };
+    Json.prototype.toJson = function () { return this.json; };
+    Json.prototype.toYaml = function () { return YAML.parse(this.json); };
     return Json;
 }());
 var Yaml = /** @class */ (function () {
     function Yaml(string) {
         this.string = string;
     }
-    Yaml.prototype.toString = function () { return this.string; };
-    Yaml.prototype.toJson = function () { return toJson(this.string); };
+    Yaml.prototype.toString = function () { return YAML.stringify(this); };
+    Yaml.prototype.toJson = function () { return YAML.jsonify(this); };
     return Yaml;
+}());
+var YAML = /** @class */ (function () {
+    function YAML() {
+    }
+    YAML.parse = function (json) { if (json instanceof Json)
+        return toYaml(json.json);
+    else
+        return toYaml(json); };
+    YAML.stringify = function (yaml) { return yaml.string; };
+    YAML.jsonify = function (yaml) { return toJson(YAML.stringify(yaml)); };
+    return YAML;
 }());
 var JsonOptions = /** @class */ (function () {
     function JsonOptions() {
@@ -42,7 +57,7 @@ var Encoding;
     Encoding[Encoding["utf-32"] = 7] = "utf-32";
 })(Encoding || (Encoding = {}));
 function toJson(yaml, options) {
-    throw new Error("toJson is not currently working");
+    throw new Error("toJson is not currently working. I am working on it though!");
     /*var json = {}
 
     function parse(yaml: string, indent: string) {
@@ -112,6 +127,7 @@ module.exports = {
     toYamlFromFile: toYamlFromFile,
     Json: Json,
     Yaml: Yaml,
+    YAML: YAML,
     JsonOptions: JsonOptions,
     YamlOptions: YamlOptions,
     FileOptions: FileOptions,
