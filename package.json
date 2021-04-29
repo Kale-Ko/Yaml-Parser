@@ -1,7 +1,7 @@
 {
     "name": "simple-yaml-parser",
-    "version": "0.7.2",
-    "description": "A simple yaml parser for node.js",
+    "version": "1.0.0",
+    "description": "A relatively simple yaml parser for node.js",
     "main": "bin/parser.js",
     "scripts": {
         "test": "node test/test.js"

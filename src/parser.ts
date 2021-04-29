@@ -49,7 +49,7 @@ enum YamlTypes {
     ArrayValue = "ArrayValue"
 }
 
-function toJson(yaml: string, options?: JsonOptions) {
+function toJson(yaml: string) {
     var json = {}
 
     var fileIndent = detectIndent(yaml).amount
@@ -87,34 +87,37 @@ function toJson(yaml: string, options?: JsonOptions) {
     lines.forEach((line: any) => { if (line.type == YamlTypes.Object && lines[lines.indexOf(line) + 1].type == YamlTypes.ArrayValue) lines[lines.indexOf(line)].type = YamlTypes.Array })
 
     lines.forEach((line: any) => {
-        if (line.type == YamlTypes.String) json[line.key] = line.value
-        else if (line.type == YamlTypes.Object) {
-            json[line.key] = {}
+        function parse(line: any, parent: Object) {
+            if (line.type == YamlTypes.String) parent[line.key] = line.value
+            else if (line.type == YamlTypes.Object) {
+                parent[line.key] = {}
 
-            var started = false
-            var theLine = line
-            lines.forEach((line: any) => {
-                if (line.key == theLine.key) { started = true; return } if (line.indent == theLine.indent) { started = false } if (!started || line.indent != theLine.indent + fileIndent) return
+                var started = false
+                var theLine = line
+                lines.forEach((line: any) => {
+                    if (line.key == theLine.key) { started = true; return } if (line.indent == theLine.indent) { started = false } if (!started || line.indent != theLine.indent + fileIndent) return
 
-                //json[theLine.key][line.key] = line.value
-            })
-        } else if (line.type == YamlTypes.Array) {
-            json[line.key] = []
+                    parse(line, parent[theLine.key])
+                })
+            } else if (line.type == YamlTypes.Array) {
+                parent[line.key] = []
 
-            var started2 = false
-            var theLine2 = line
-            lines.forEach((line: any) => {
-                if (line.key == theLine2.key) { started2 = true; return } if (!started2) return
+                var started2 = false
+                var theLine2 = line
+                lines.forEach((line: any) => {
+                    if (line.key == theLine2.key) { started2 = true; return } if (!started2) return
 
-                if (line.type == YamlTypes.ArrayValue) { if (line.indent - 2 == theLine2.indent) json[theLine2.key].push(line.value.replace("-", "")) } else started2 = false
-            })
+                    if (line.type == YamlTypes.ArrayValue) { if (line.indent - 2 == theLine2.indent) parent[theLine2.key].push(line.value.replace("-", "")) } else started2 = false
+                })
+            }
         }
+        if (line.indent == 0) parse(line, json)
     })
 
     return new Json(JSON.parse(JSON.stringify(json)))
 }
 
-function toJsonFromFile(yamlFile: string, options?: FileOptions, jsonOptions?: JsonOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions) }
+function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions) }
 
 function toYaml(json: JSON, options?: YamlOptions) {
     if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")

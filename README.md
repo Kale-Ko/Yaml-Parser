@@ -16,12 +16,10 @@ Then in your script add `const yamlParser = require("simple-yaml-parser")`
 
 # Yaml to Json
 
-`yamlParser.toJson(yamlString, options)` - Takes a yaml string and returns a json
+`yamlParser.toJson(yamlString)` - Takes a yaml string and returns a json
 
 \
-`yamlParser.toJsonFromFile(fileName, fileOptions, options)` - Takes a yaml file and returns a json
-
-### Options:
+`yamlParser.toJsonFromFile(fileName, fileOptions)` - Takes a yaml file and returns a json
 
 ### File Options:
 encoding - A valid file encoding type `"us_ascii", "utf8", "ebcdic", "utf16", "utf32"`
@@ -30,7 +28,9 @@ encoding - A valid file encoding type `"us_ascii", "utf8", "ebcdic", "utf16", "u
 Strings,
 Objects,
 Arrays,
-Strings in Objects
+Strings in Objects,
+Arrays in Objects,
+Objects in Objects
 
 
 
