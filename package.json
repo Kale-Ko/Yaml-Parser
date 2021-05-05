@@ -4,7 +4,7 @@
     "description": "A relatively simple yaml parser for node.js",
     "main": "bin/parser.js",
     "scripts": {
-        "test": "node test/test.js"
+        "test": "node bin/test.js"
     },
     "dependencies": {
         "fs": "0.0.1-security",

@@ -117,7 +117,7 @@ function toJson(yaml: string) {
     return new Json(JSON.parse(JSON.stringify(json)))
 }
 
-function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions) }
+function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
 
 function toYaml(json: JSON, options?: YamlOptions) {
     if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")

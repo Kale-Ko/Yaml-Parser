@@ -1,6 +1,6 @@
 var fs = require("fs");
 var detectIndent = require('detect-indent');
-var Json = /** @class */ (function () {
+var Json = (function () {
     function Json(json) {
         if (json instanceof Json)
             this.json = json.json;
@@ -12,7 +12,7 @@ var Json = /** @class */ (function () {
     Json.prototype.toYaml = function () { return YAML.parse(this.json); };
     return Json;
 }());
-var Yaml = /** @class */ (function () {
+var Yaml = (function () {
     function Yaml(string) {
         this.string = string;
     }
@@ -20,7 +20,7 @@ var Yaml = /** @class */ (function () {
     Yaml.prototype.toJson = function () { return YAML.jsonify(this); };
     return Yaml;
 }());
-var YAML = /** @class */ (function () {
+var YAML = (function () {
     function YAML() {
     }
     YAML.parse = function (json) { if (json instanceof Json)
@@ -32,17 +32,17 @@ var YAML = /** @class */ (function () {
     YAML.jsonify = function (yaml) { return toJson(YAML.stringify(yaml)); };
     return YAML;
 }());
-var JsonOptions = /** @class */ (function () {
+var JsonOptions = (function () {
     function JsonOptions() {
     }
     return JsonOptions;
 }());
-var YamlOptions = /** @class */ (function () {
+var YamlOptions = (function () {
     function YamlOptions() {
     }
     return YamlOptions;
 }());
-var FileOptions = /** @class */ (function () {
+var FileOptions = (function () {
     function FileOptions() {
     }
     return FileOptions;
@@ -139,7 +139,7 @@ function toJson(yaml) {
     });
     return new Json(JSON.parse(JSON.stringify(json)));
 }
-function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding), jsonOptions); }
+function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding)); }
 function toYaml(json, options) {
     if (json instanceof Array)
         throw new Error("You currently can't input json arrays unless they are a subvalue");
