@@ -150,12 +150,12 @@ function toYaml(json, options) {
         for (var index = 0; index < (options.indentAmount || 2); index++)
             indentT += " ";
     }
+    var propertiesCompatability = false;
+    if (options != null) {
+        if (options.propertiesCompatability)
+            propertiesCompatability = true;
+    }
     function parse(json, indent) {
-        var propertiesCompatability = false;
-        if (options != null) {
-            if (options.propertiesCompatability)
-                propertiesCompatability = true;
-        }
         if (!propertiesCompatability) {
             Object.keys(json).forEach(function (key) {
                 var value = json[key];
@@ -189,6 +189,8 @@ function toYaml(json, options) {
         }
     }
     parse(json, "");
+    if (propertiesCompatability)
+        yaml = yaml.replace(/:/g, "=");
     return YAML.parseString(yaml);
 }
 function toYamlFromFile(jsonFile, options, yamlOptions) { return toYaml(JSON.parse(fs.readFileSync(jsonFile, options.encoding)), yamlOptions); }
