@@ -47,14 +47,14 @@ var FileOptions = (function () {
     }
     return FileOptions;
 }());
-var Encoding;
-(function (Encoding) {
-    Encoding["us_ascii"] = "us-ascii";
-    Encoding["utf8"] = "utf8";
-    Encoding["ebcdic"] = "ebcdic";
-    Encoding["utf16"] = "utf16";
-    Encoding["utf32"] = "utf32";
-})(Encoding || (Encoding = {}));
+var Encodings;
+(function (Encodings) {
+    Encodings["us_ascii"] = "us-ascii";
+    Encodings["utf8"] = "utf8";
+    Encodings["ebcdic"] = "ebcdic";
+    Encodings["utf16"] = "utf16";
+    Encodings["utf32"] = "utf32";
+})(Encodings || (Encodings = {}));
 var YamlTypes;
 (function (YamlTypes) {
     YamlTypes["String"] = "String";
@@ -197,11 +197,6 @@ module.exports = {
     toJsonFromFile: toJsonFromFile,
     toYaml: toYaml,
     toYamlFromFile: toYamlFromFile,
-    Json: Json,
-    Yaml: Yaml,
     YAML: YAML,
-    JsonOptions: JsonOptions,
-    YamlOptions: YamlOptions,
-    FileOptions: FileOptions,
-    Encoding: Encoding
+    Encodings: Encodings
 };

@@ -31,10 +31,10 @@ class YamlOptions {
 }
 
 class FileOptions {
-    encoding: Encoding
+    encoding: Encodings
 }
 
-enum Encoding {
+enum Encodings {
     us_ascii = "us-ascii",
     utf8 = "utf8",
     ebcdic = "ebcdic",
@@ -165,11 +165,6 @@ module.exports = {
     toJsonFromFile,
     toYaml,
     toYamlFromFile,
-    Json,
-    Yaml,
     YAML,
-    JsonOptions,
-    YamlOptions,
-    FileOptions,
-    Encoding
+    Encodings
 }
