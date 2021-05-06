@@ -126,10 +126,10 @@ function toYaml(json: JSON, options?: YamlOptions) {
     var indentT = "  "
     if (options != null) { indentT = ""; for (var index = 0; index < (options.indentAmount || 2); index++) indentT += " " }
 
-    function parse(json: JSON, indent: string) {
-        var propertiesCompatability = false
-        if (options != null) { if (options.propertiesCompatability) propertiesCompatability = true }
+    var propertiesCompatability = false
+    if (options != null) { if (options.propertiesCompatability) propertiesCompatability = true }
 
+    function parse(json: JSON, indent: string) {
         if (!propertiesCompatability) {
             Object.keys(json).forEach((key: any) => {
                 var value = json[key]
@@ -154,6 +154,8 @@ function toYaml(json: JSON, options?: YamlOptions) {
         }
     }
     parse(json, "")
+
+    if (propertiesCompatability) yaml = yaml.replace(/:/g, "=")
 
     return YAML.parseString(yaml)
 }
