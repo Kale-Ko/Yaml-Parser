@@ -8,7 +8,7 @@ var Json = (function () {
             this.json = json;
     }
     Json.prototype.toString = function () { return JSON.stringify(this.json); };
-    Json.prototype.toJson = function () { return this.json; };
+    Json.prototype.toNormal = function () { return this.json; };
     Json.prototype.toYaml = function () { return YAML.parse(this.json); };
     return Json;
 }());
@@ -31,11 +31,6 @@ var YAML = (function () {
     YAML.stringify = function (yaml) { return yaml.string; };
     YAML.jsonify = function (yaml) { return toJson(YAML.stringify(yaml)); };
     return YAML;
-}());
-var JsonOptions = (function () {
-    function JsonOptions() {
-    }
-    return JsonOptions;
 }());
 var YamlOptions = (function () {
     function YamlOptions() {
@@ -142,7 +137,7 @@ function toJson(yaml) {
 function toJsonFromFile(yamlFile, options) { return toJson(fs.readFileSync(yamlFile, options.encoding)); }
 function toYaml(json, options) {
     if (json instanceof Array)
-        throw new Error("You currently can't input json arrays unless they are a subvalue");
+        throw new Error("You can't input json arrays unless they are a subvalue");
     var yaml = "";
     var indentT = "  ";
     if (options != null) {

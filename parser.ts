@@ -5,7 +5,7 @@ class Json {
     constructor(json: JSON | Json) { if (json instanceof Json) this.json = json.json; else this.json = json }
     json: JSON
     toString() { return JSON.stringify(this.json) }
-    toJson() { return this.json }
+    toNormal() { return this.json }
     toYaml() { return YAML.parse(this.json) }
 }
 
@@ -22,8 +22,6 @@ class YAML {
     static stringify(yaml: Yaml) { return yaml.string }
     static jsonify(yaml: Yaml) { return toJson(YAML.stringify(yaml)) }
 }
-
-class JsonOptions { }
 
 class YamlOptions {
     indentAmount: number
@@ -120,7 +118,7 @@ function toJson(yaml: string) {
 function toJsonFromFile(yamlFile: string, options?: FileOptions) { return toJson(fs.readFileSync(yamlFile, options.encoding)) }
 
 function toYaml(json: JSON, options?: YamlOptions) {
-    if (json instanceof Array) throw new Error("You currently can't input json arrays unless they are a subvalue")
+    if (json instanceof Array) throw new Error("You can't input json arrays unless they are a subvalue")
 
     var yaml = ""
     var indentT = "  "

@@ -42,8 +42,8 @@ Objects in Objects
 `yamlParser.toYamlFromFile(fileName, fileOptions, options)` - Takes a json file and returns a yaml object
 
 ### Options:
-indentAmount - A Number - How many spaces to use for an indent\
-propertiesCompatability - A boolean - Wether or not to enable compatability with .properties files
+indentAmount - Number - How many spaces to use for an indent\
+propertiesCompatability - Boolean - Wether or not to enable compatability with .properties files
 
 ### File Options:
 encoding - A valid file encoding type `"us-ascii", "utf8", "utf-8", "ebcdic", "utf16", "utf-16", "utf32", "utf-32"`
@@ -55,7 +55,7 @@ Arrays,
 Strings in Objects,
 Arrays in Objects,
 Objects in Objects,
-.Propertie files
+.propertie files
 
 
 
@@ -65,7 +65,7 @@ Objects in Objects,
 `Json.toString()` - Turns a Json object into a string
 
 \
-`Json.toJson()` - Turns a Json object into a normal JSON
+`Json.toNormal()` - Turns a Json object into a normal JSON
 
 \
 `Json.toYaml()` - Turns a Json object into a Yaml object
@@ -86,6 +86,9 @@ Objects in Objects,
 Static
 
 `YAML.parse(json)` - Takes a Json object and returns a Yaml
+
+\
+`YAML.parseString(string)` - Takes a string and returns a Yaml
 
 \
 `YAML.stringify(yaml)` - Takes a Yaml object and returns a string
