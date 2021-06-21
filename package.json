@@ -1,7 +1,7 @@
 {
     "name": "super-yaml-parser",
     "version": "1.4.1",
-    "description": "A relatively simple yaml parser for node.js",
+    "description": "A yaml parser for node.js",
     "main": "bin/parser.js",
     "scripts": {
         "test": "node bin/test.js"
@@ -16,7 +16,7 @@
     },
     "author": {
         "name": "Kale Ko",
-        "url": "https://kaleko.herokuapp.com/"
+        "url": "https://kaleko.ga/"
     },
     "license": "Apache-2.0",
     "keywords": [
