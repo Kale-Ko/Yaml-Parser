@@ -2,17 +2,9 @@
     "name": "super-yaml-parser",
     "version": "1.4.1",
     "description": "A yaml parser for node.js",
-    "main": "bin/parser.js",
-    "scripts": {
-        "test": "node bin/test.js"
-    },
+    "main": "dist/parser.js",
     "dependencies": {
-        "fs": "0.0.1-security",
         "detect-indent": "^6.0.0"
-    },
-    "devDependencies": {
-        "@types/node": "^15.0.1",
-        "typescript": "^4.2.4"
     },
     "author": {
         "name": "Kale Ko",
