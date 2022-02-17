@@ -1,6 +1,6 @@
 {
     "name": "super-yaml-parser",
-    "version": "1.4.4",
+    "version": "1.4.6",
     "description": "A yaml parser for node.js",
     "main": "dist/parser.js",
     "dependencies": {
