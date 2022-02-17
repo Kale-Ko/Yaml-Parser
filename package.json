@@ -1,7 +1,7 @@
 {
     "name": "super-yaml-parser",
     "version": "1.4.6",
-    "description": "A yaml parser for node.js",
+    "description": "A yaml parser for node.js.",
     "main": "dist/parser.js",
     "dependencies": {
         "detect-indent": "^6.0.0"
